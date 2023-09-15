@@ -1,3 +1,5 @@
+const socket = io("http://localhost:3000");
+
 // array of creatues
 let creatures = [];
 
@@ -73,29 +75,40 @@ document.addEventListener("click", () => {
   );
 });
 
-io.on("server to gesture", (points, who5, sprite, color) => {
+socket.on("server to gesture", (points, who5, sprite, color) => {
 	console.log("recieved data");
 	console.log("Points: " + points);
 	if (gests.length > 20) {
 		gests.shift();
 	}
 	gests.push(
-		//seed, colorVar, girth, cap, join, x, y, speed, wiggle, smoothness
-		new Gesture(
-			random(99999),
-			color(red, green, blue, alpha),
-			girth,
-			cap,
-			join,
-			random(-width / 3, width / 3),
-			random(-height / 3, height / 3),
-			speed,
-			wiggle,
-			smoothness
-		)
+		new Creature(
+			color(
+			  hexToRgb(color).r,
+			  hexToRgb(color).g,
+			  hexToRgb(color).b,
+			  floor(random(200, 255))
+			), // hue
+			random(0.0, 1.0), // agitatedness
+			random(0.8, 2.5), // speed
+			floor(random(1, 15)), // pointiness
+			random(0.2, 1.2), // size
+			Math.floor(Math.random() * 2), // sprite
+			random(-width / 3, width / 3), // x
+			random(-height / 3, height / 3) // y
+		  )
 	);
 	gests[gests.length - 1].points = [...points];
 });
+
+function hexToRgb(hex) {
+	var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+	return result ? {
+	  r: parseInt(result[1], 16),
+	  g: parseInt(result[2], 16),
+	  b: parseInt(result[3], 16)
+	} : null;
+  }
 
 // draw space background
 function space(w, h, star_count, star_size) {
