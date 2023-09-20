@@ -1,4 +1,6 @@
-const socket = io("http://localhost:3000", { secure: false });
+//const socket = io("http://localhost:3000", { secure: false });
+const socket = io("wss://navinate.com", { secure: true });
+
 
 // array of creatues
 let creatures = [];
