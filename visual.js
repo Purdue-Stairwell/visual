@@ -77,6 +77,7 @@ function draw() {
 
 socket.on("backend to visual", (points, who5, sprite, colorVar) => {
 	console.log("recieved data");
+	console.log("Color: " + colorVar + " who5: " + who5 + " Sprite: " + sprite);
 	if (points !== null && colorVar !== null) {
 		console.log("Points: " + points);
 		if (creatures.length > 20) {
@@ -92,7 +93,6 @@ socket.on("backend to visual", (points, who5, sprite, colorVar) => {
 				), // hue
 				random(0.0, 1.0), // agitatedness
 				random(0.8, 2.5), // speed
-				floor(random(1, 15)), // pointiness
 				random(0.2, 1.2), // size
 				Math.floor(Math.random() * 2), // sprite
 				random(-width / 3, width / 3), // x
