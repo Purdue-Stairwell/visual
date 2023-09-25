@@ -1,7 +1,6 @@
 //const socket = io("http://localhost:3000", { secure: false });
 const socket = io("wss://navinate.com", { secure: true });
 
-
 // array of creatues
 let creatures = [];
 
@@ -13,20 +12,26 @@ let heads = [];
 // stars
 let star_x = [],
 	star_y = [],
-	stars_made = false;
+	stars_made = false
+names = ["bread", "drops", "rombo", "star", "swirl"];
 
 // preload images
 function preload() {
-	heads.push(loadImage("./assets/sprites/heads/0/0.gif"));
-	heads.push(loadImage("./assets/sprites/heads/1/1.gif"));
+	heads.push(loadImage("./assets/sprites/heads/1/head_test.gif"));
 
-	bodies.push(loadImage("./assets/sprites/bodies/0/0.gif"));
-	bodies.push(loadImage("./assets/sprites/bodies/1/1.gif"));
+	for (let i = 0; i < names.length; i++) {
+		let images = new Array();
 
-	tails.push(loadImage("./assets/sprites/tails/0/0.gif"));
-	tails.push(loadImage("./assets/sprites/tails/1/1.gif"));
+		for (let j = 0; j < 5; j++) {
+			images[j] = loadImage("./assets/sprites/bodies/" + names[i] + "/" + j + ".gif");
+		}
+		bodies.push(images);
+	}
 
-	console.log(heads);
+	console.log(bodies);
+
+	//bodies.push(loadImage("./assets/sprites/bodies/0/0.gif"));
+	//bodies.push(loadImage("./assets/sprites/bodies/1/1.gif"));
 }
 
 // setup canvas and framerate before drawing
@@ -52,28 +57,58 @@ function draw() {
 
 }
 
-// document.addEventListener("click", () => {
-//   if (creatures.length > 20) {
-//     creatures.shift();
-//   }
-//   creatures.push(
-//     new Creature(
-//       color(
-//         floor(random(0, 255)),
-//         floor(random(0, 255)),
-//         floor(random(0, 255)),
-//         floor(random(200, 255))
-//       ), // hue
-//       random(0.0, 1.0), // agitatedness
-//       random(0.8, 2.5), // speed
-//       floor(random(1, 15)), // pointiness
-//       random(0.2, 1.2), // size
-//       Math.floor(Math.random() * 2), // sprite
-//       random(-width / 3, width / 3), // x
-//       random(-height / 3, height / 3) // y
-//     )
-//   );
-// });
+document.addEventListener("click", () => {
+	if (creatures.length > 20) {
+		creatures.shift();
+	}
+	creatures.push(
+		new Creature(
+			color(
+				floor(random(0, 255)),
+				floor(random(0, 255)),
+				floor(random(0, 255)),
+				floor(random(200, 255))
+			), // hue
+			Math.floor(Math.random() * 5), // color index
+			random(0.0, 1.0), // agitatedness
+			random(0.8, 2.5), // speed
+			random(0.2, 1.2), // size
+			Math.floor(Math.random() * 2), // sprite
+			random(-width / 3, width / 3), // x
+			random(-height / 3, height / 3) // y
+		)
+	);
+});
+
+function colorToIndex(colorVar) {
+	switch (colorVar) {
+		case "#4d26db":
+			return (0);
+		case "#05a59d":
+			return (1);
+		case "#f6921e":
+			return (2);
+		case "#ec1d23":
+			return (3);
+		case "#ec008b":
+			return (4);
+	}
+}
+
+function pathToSprite(path) {
+	switch (path) {
+		case "/anim/newblob.gif":
+			return (0);
+		case "/anim/drops.gif":
+			return (1);
+		case "/anim/sprite03.gif":
+			return (2);
+		case "/anim/star01.gif":
+			return (3);
+		case "/anim/head.gif":
+			return (4);
+	}
+}
 
 socket.on("backend to visual", (points, who5, sprite, colorVar) => {
 	console.log("recieved data");
@@ -85,16 +120,12 @@ socket.on("backend to visual", (points, who5, sprite, colorVar) => {
 		}
 		creatures.push(
 			new Creature(
-				color(
-					hexToRgb(colorVar).r,
-					hexToRgb(colorVar).g,
-					hexToRgb(colorVar).b,
-					floor(random(200, 255))
-				), // hue
+				colorVar, // color (hex)
+				colorToIndex(colorVar), // color index
 				random(0.0, 1.0), // agitatedness
 				random(0.8, 2.5), // speed
 				random(0.2, 1.2), // size
-				Math.floor(Math.random() * 2), // sprite
+				pathToSprite(sprite), // sprite
 				random(-width / 3, width / 3), // x
 				random(-height / 3, height / 3) // y
 			)
