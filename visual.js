@@ -27,11 +27,6 @@ function preload() {
 		}
 		bodies.push(images);
 	}
-
-	console.log(bodies);
-
-	//bodies.push(loadImage("./assets/sprites/bodies/0/0.gif"));
-	//bodies.push(loadImage("./assets/sprites/bodies/1/1.gif"));
 }
 
 // setup canvas and framerate before drawing
@@ -42,7 +37,6 @@ function setup() {
 
 // run every tick; draws background, space, and creatures
 function draw() {
-
 	// background
 	background(0);
 	space(width, height, 200, 2);
@@ -54,7 +48,6 @@ function draw() {
 		g.drawCreatures();
 	});
 	pop();
-
 }
 
 document.addEventListener("click", () => {
@@ -92,6 +85,8 @@ function colorToIndex(colorVar) {
 			return (3);
 		case "#ec008b":
 			return (4);
+		default:
+			return (0);
 	}
 }
 
@@ -107,14 +102,14 @@ function pathToSprite(path) {
 			return (3);
 		case "/anim/head.gif":
 			return (4);
+		default:
+			return (0);
 	}
 }
 
 socket.on("backend to visual", (points, who5, sprite, colorVar) => {
-	console.log("recieved data");
-	console.log("Color: " + colorVar + " who5: " + who5 + " Sprite: " + sprite);
+	console.log("Color: " + colorVar + " Who5: " + who5 + " Sprite: " + sprite);
 	if (points !== null && colorVar !== null) {
-		console.log("Points: " + points);
 		if (creatures.length > 20) {
 			creatures.shift();
 		}
@@ -155,8 +150,8 @@ function space(w, h, star_count, star_size) {
 
 	if (stars_made == false) {
 		for (let i = 0; i <= star_count - 1; i++) {
-			star_x[i] = randomGaussian(w / 2, w / 2);
-			star_y[i] = randomGaussian(h / 2, h / 2);
+			star_x[i] = Math.floor(Math.random() * w);
+			star_y[i] = Math.floor(Math.random() * h);
 			stars_made = true;
 		}
 	}
@@ -165,12 +160,12 @@ function space(w, h, star_count, star_size) {
 		fill(255);
 		circle(star_x[i], star_y[i], star_size);
 		star_y[i] += 0.1;
-		if (abs(randomGaussian(0, 3) > 6)) {
-			star_x[i] += randomGaussian(0, 1);
+		if (Math.floor(Math.random() * 15) % 15 == 0) {
+			star_x[i] += (Math.floor(Math.random() * 3) - 1);
 		}
 		if (star_x[i] >= w || star_y[i] >= h) {
-			star_x[i] = randomGaussian(w / 2, w / 2);
-			star_y[i] = randomGaussian(h / 2, h / 2);
+			star_x[i] = Math.floor(Math.random() * w);
+			star_y[i] = Math.floor(Math.random() * h);
 		}
 	}
 }
