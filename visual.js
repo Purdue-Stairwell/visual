@@ -107,8 +107,8 @@ function pathToSprite(path) {
 	}
 }
 
-socket.on("backend to visual", (points, who5, sprite, colorVar) => {
-	console.log("Color: " + colorVar + " Who5: " + who5 + " Sprite: " + sprite);
+socket.on("backend to visual", (points, who5, sprite, colorVar, base) => {
+	console.log("Color: " + colorVar + " Who5: " + who5 + " Sprite: " + sprite + " Base: " + base);
 	if (points !== null && colorVar !== null) {
 		if (creatures.length > 20) {
 			creatures.shift();
@@ -121,6 +121,7 @@ socket.on("backend to visual", (points, who5, sprite, colorVar) => {
 				random(0.8, 2.5), // speed
 				random(0.2, 1.2), // size
 				pathToSprite(sprite), // sprite
+				pathToSprite(base), // base sprite
 				random(-width / 3, width / 3), // x
 				random(-height / 3, height / 3) // y
 			)
