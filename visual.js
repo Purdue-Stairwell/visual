@@ -136,7 +136,7 @@ socket.on("backend to visual", (points, who5, sprite, colorVar, base) => {
 			)
 		);
 		creatures[creatures.length - 1].points = [...points];
-		for (i = 0; i <= creatures[creatures.length - 1].points.length; i++) {
+		for (i = 0; i <= creatures[creatures.length - 1].points.length - 1; i++) {
 			creatures[creatures.length - 1].x[i] = creatures[creatures.length - 1].points[i]["x"];
 			creatures[creatures.length - 1].y[i] = creatures[creatures.length - 1].points[i]["y"];
 		}
