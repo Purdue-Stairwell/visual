@@ -50,28 +50,36 @@ function draw() {
 	pop();
 }
 
-document.addEventListener("click", () => {
-	if (creatures.length > 20) {
-		creatures.shift();
-	}
-	creatures.push(
-		new Creature(
-			color(
-				floor(random(0, 255)),
-				floor(random(0, 255)),
-				floor(random(0, 255)),
-				floor(random(200, 255))
-			), // hue
-			Math.floor(Math.random() * 5), // color index
-			random(0.0, 1.0), // agitatedness
-			random(0.8, 2.5), // speed
-			random(0.2, 1.2), // size
-			Math.floor(Math.random() * 2), // sprite
-			random(-width / 3, width / 3), // x
-			random(-height / 3, height / 3) // y
-		)
-	);
-});
+// document.addEventListener("click", () => {
+// 	if (creatures.length > 20) {
+// 		creatures.shift();
+// 	}
+// 	creatures.push(
+// 		new Creature(
+// 			color(
+// 				floor(random(0, 255)),
+// 				floor(random(0, 255)),
+// 				floor(random(0, 255)),
+// 				floor(random(200, 255))
+// 			), // hue
+// 			Math.floor(Math.random() * 5), // color index
+// 			random(0.0, 1.0), // agitatedness
+// 			random(0.8, 2.5), // speed
+// 			random(0.2, 1.2), // size
+// 			Math.floor(Math.random() * 5), // sprite
+// 			Math.floor(Math.random() * 5), // base
+// 			random(-width / 3, width / 3), // x
+// 			random(-height / 3, height / 3) // y
+// 		)
+// 	);
+// 	creatures[creatures.length - 1].addPoint(-10, 10);
+// 	creatures[creatures.length - 1].addPoint(10, 10);
+// 	creatures[creatures.length - 1].addPoint(20, 20);
+// 	creatures[creatures.length - 1].addPoint(30, 30);
+// 	creatures[creatures.length - 1].addPoint(100, -100);
+// 	creatures[creatures.length - 1].addPoint(-100, 100);
+// 	creatures[creatures.length - 1].normalizePoints();
+// });
 
 function colorToIndex(colorVar) {
 	switch (colorVar) {
@@ -117,16 +125,21 @@ socket.on("backend to visual", (points, who5, sprite, colorVar, base) => {
 			new Creature(
 				colorVar, // color (hex)
 				colorToIndex(colorVar), // color index
-				random(0.0, 1.0), // agitatedness
-				random(0.8, 2.5), // speed
+				random(0.0, 0.75), // agitatedness
+				random(0.3, 1.5), // speed
 				random(0.2, 1.2), // size
 				pathToSprite(sprite), // sprite
 				pathToSprite(base), // base sprite
 				random(-width / 3, width / 3), // x
-				random(-height / 3, height / 3) // y
+				random(-height / 3, height / 3), // y
+				points
 			)
 		);
 		creatures[creatures.length - 1].points = [...points];
+		for (i = 0; i <= creatures[creatures.length - 1].points.length; i++) {
+			creatures[creatures.length - 1].x[i] = creatures[creatures.length - 1].points[i]["x"];
+			creatures[creatures.length - 1].y[i] = creatures[creatures.length - 1].points[i]["y"];
+		}
 	}
 	else {
 		console.log("Missing Either Color Or Points");
