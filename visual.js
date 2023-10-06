@@ -9,6 +9,8 @@ let tails = [];
 let bodies = [];
 let heads = [];
 
+let time = 0;
+
 // stars
 let star_x = [],
 	star_y = [],
@@ -23,7 +25,7 @@ function preload() {
 		let images = new Array();
 
 		for (let j = 0; j < 5; j++) {
-			images[j] = loadImage("./assets/sprites/bodies/" + names[i] + "/" + j + ".gif");
+			images[j] = loadImage("./assets/sprites/skin/" + names[i] + "/" + j + ".gif");
 		}
 		bodies.push(images);
 	}
@@ -41,6 +43,8 @@ function draw() {
 	background(0);
 	space(width, height, 200, 2);
 
+	time += 0.001;
+
 	//draw each creature
 	push();
 	creatures.forEach((g) => {
@@ -50,36 +54,36 @@ function draw() {
 	pop();
 }
 
-// document.addEventListener("click", () => {
-// 	if (creatures.length > 20) {
-// 		creatures.shift();
-// 	}
-// 	creatures.push(
-// 		new Creature(
-// 			color(
-// 				floor(random(0, 255)),
-// 				floor(random(0, 255)),
-// 				floor(random(0, 255)),
-// 				floor(random(200, 255))
-// 			), // hue
-// 			Math.floor(Math.random() * 5), // color index
-// 			random(0.0, 1.0), // agitatedness
-// 			random(0.8, 2.5), // speed
-// 			random(0.2, 1.2), // size
-// 			Math.floor(Math.random() * 5), // sprite
-// 			Math.floor(Math.random() * 5), // base
-// 			random(-width / 3, width / 3), // x
-// 			random(-height / 3, height / 3) // y
-// 		)
-// 	);
-// 	creatures[creatures.length - 1].addPoint(-10, 10);
-// 	creatures[creatures.length - 1].addPoint(10, 10);
-// 	creatures[creatures.length - 1].addPoint(20, 20);
-// 	creatures[creatures.length - 1].addPoint(30, 30);
-// 	creatures[creatures.length - 1].addPoint(100, -100);
-// 	creatures[creatures.length - 1].addPoint(-100, 100);
-// 	creatures[creatures.length - 1].normalizePoints();
-// });
+document.addEventListener("click", () => {
+	if (creatures.length > 20) {
+		creatures.shift();
+	}
+	creatures.push(
+		new Creature(
+			color(
+				floor(random(0, 255)),
+				floor(random(0, 255)),
+				floor(random(0, 255)),
+				floor(random(200, 255))
+			), // hue
+			Math.floor(Math.random() * 5), // color index
+			random(0.0, 1.0), // agitatedness
+			random(0.8, 2.5), // speed
+			random(0.2, 1.2), // size
+			Math.floor(Math.random() * 5), // sprite
+			Math.floor(Math.random() * 5), // base
+			random(-width / 3, width / 3), // x
+			random(-height / 3, height / 3) // y
+		)
+	);
+	creatures[creatures.length - 1].addPoint(-10, 10);
+	creatures[creatures.length - 1].addPoint(10, 10);
+	creatures[creatures.length - 1].addPoint(20, 20);
+	creatures[creatures.length - 1].addPoint(30, 30);
+	creatures[creatures.length - 1].addPoint(100, -100);
+	creatures[creatures.length - 1].addPoint(-100, 100);
+	creatures[creatures.length - 1].normalizePoints();
+});
 
 function colorToIndex(colorVar) {
 	switch (colorVar) {
@@ -127,7 +131,7 @@ socket.on("backend to visual", (points, who5, sprite, colorVar, base) => {
 				colorToIndex(colorVar), // color index
 				random(0.0, 0.75), // agitatedness
 				random(0.3, 1.5), // speed
-				random(0.2, 1.2), // size
+				random(0.75, 1.1), // size
 				pathToSprite(sprite), // sprite
 				pathToSprite(base), // base sprite
 				random(-width / 3, width / 3), // x
