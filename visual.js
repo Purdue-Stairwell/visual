@@ -40,16 +40,17 @@ function preload() {
 function setup() {
 	createCanvas(mask.width, mask.height);
 	console.log("Canvas Size: " + mask.width + "x" + mask.height);
-	frameRate(60);
-	image(mask, 0, 0, width, height);
+	frameRate(30);
+	
 }
 
 // run every tick; draws background, space, and creatures
 function draw() {
 	// background
-	//background(0);
+	background(0);
+	imageMode(CENTER);
+	image(mask, width/2, height/2, width, height);
 	//space(width, height, 200, 2);
-	console.log("Creatures: " + creatures.length)
 	
 	//DEBUG STUFF
 	stroke(255,0,0);
@@ -60,12 +61,47 @@ function draw() {
 	line(0, height, width, height);
 
 	time += 0.001;
-
+	
 	//draw each creature
 	for(let g of creatures) {
 		g.update();
 		g.drawCreatures();
+		stroke(255,0,0);
+		strokeWeight(10);
+		point(g.pos.x, g.pos.y);
 	}
+	
+	warpCreatures();
+}
+
+function warpCreatures() {
+	for(g of creatures) {
+		
+		if(brightness(mask.get(g.pos.x, g.pos.y)) < 50) {
+			stroke(255,0,0);
+			strokeWeight(10);
+			point(g.pos.x, g.pos.y);
+		}
+	}
+	/* if (this.pos.y >= height) {
+		this.pos.y = 0;
+	}
+	else if (this.pos.y <= 0) {
+		this.pos.y = height;
+	}
+
+	if (this.pos.x >= width ) {
+		this.pos.x = 0;
+	}
+	else if (this.pos.x <= 0) {
+		this.pos.x = width;
+	}
+	//check if creature is offscreen
+	if(brightness(mask.get(this.pos.x, this.pos.y)) < 50) {
+		//if it is, move it to a random location on the screen
+		this.pos.x = random(width);
+		this.pos.y = random(height);
+	} */
 }
 
 //DEBUG SPAWN METHOD
@@ -118,7 +154,8 @@ function mouseClicked() {
 		Math.floor(Math.random() * 5), // sprite
 		Math.floor(Math.random() * 5), // base
 		mouseX, // x
-		mouseY // y
+		mouseY, // y
+		[], // points
 	)
 	newCreature.addPoint(10, 10);
 	newCreature.addPoint(40, 40);
@@ -129,6 +166,11 @@ function mouseClicked() {
 
 	newCreature.normalizePoints();
 	creatures.push(newCreature);
+	creatures[creatures.length - 1].points = newCreature.points;
+	for (i = 0; i <= creatures[creatures.length - 1].points.length - 1; i++) {
+		creatures[creatures.length - 1].x[i] = creatures[creatures.length - 1].points[i]["x"];
+		creatures[creatures.length - 1].y[i] = creatures[creatures.length - 1].points[i]["y"];
+	}
 }
 
 function colorToIndex(colorVar) {
@@ -183,6 +225,7 @@ socket.on("backend to visual", (points, who5, sprite, colorVar, base) => {
 			random(-height / 3, height / 3), // y
 			points // points
 		)
+		newCreature.normalizePoints();
 		creatures.push(newCreature);
 		creatures[creatures.length - 1].points = [...points];
 		for (i = 0; i <= creatures[creatures.length - 1].points.length - 1; i++) {
