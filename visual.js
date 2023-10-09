@@ -34,6 +34,7 @@ function preload() {
 // setup canvas and framerate before drawing
 function setup() {
 	createCanvas(windowWidth, windowHeight);
+	console.log(windowWidth, windowHeight);
 	frameRate(60);
 }
 
@@ -58,31 +59,30 @@ document.addEventListener("click", () => {
 	if (creatures.length > 20) {
 		creatures.shift();
 	}
-	creatures.push(
-		new Creature(
-			color(
-				floor(random(0, 255)),
-				floor(random(0, 255)),
-				floor(random(0, 255)),
-				floor(random(200, 255))
-			), // hue
-			Math.floor(Math.random() * 5), // color index
-			random(0.0, 1.0), // agitatedness
-			random(0.8, 2.5), // speed
-			random(0.2, 1.2), // size
-			Math.floor(Math.random() * 5), // sprite
-			Math.floor(Math.random() * 5), // base
-			random(-width / 3, width / 3), // x
-			random(-height / 3, height / 3) // y
-		)
-	);
-	creatures[creatures.length - 1].addPoint(-10, 10);
-	creatures[creatures.length - 1].addPoint(10, 10);
-	creatures[creatures.length - 1].addPoint(20, 20);
-	creatures[creatures.length - 1].addPoint(30, 30);
-	creatures[creatures.length - 1].addPoint(100, -100);
-	creatures[creatures.length - 1].addPoint(-100, 100);
-	creatures[creatures.length - 1].normalizePoints();
+	let newCreature = new Creature(
+		color(
+			floor(random(0, 255)),
+			floor(random(0, 255)),
+			floor(random(0, 255)),
+			floor(random(200, 255))
+		), // hue
+		Math.floor(Math.random() * 5), // color index
+		random(0.0, 1.0), // agitatedness
+		random(0.8, 2.5), // speed
+		random(0.2, 1.2), // size
+		Math.floor(Math.random() * 5), // sprite
+		Math.floor(Math.random() * 5), // base
+		random(-width / 3, width / 3), // x
+		random(-height / 3, height / 3) // y
+	)
+	newCreature.addPoint(0, 0);
+	newCreature.addPoint(10, 10);
+	newCreature.addPoint(20, 20);
+	newCreature.addPoint(30, 30);
+	newCreature.addPoint(40, 40);
+	newCreature.addPoint(50, 50);
+	newCreature.normalizePoints();
+	creatures.push(newCreature);
 });
 
 function colorToIndex(colorVar) {
