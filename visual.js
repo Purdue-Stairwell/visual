@@ -9,6 +9,9 @@ let tails = [];
 let bodies = [];
 let heads = [];
 
+// collision mask
+let mask;
+
 let time = 0;
 
 // stars
@@ -29,12 +32,14 @@ function preload() {
 		}
 		bodies.push(images);
 	}
+
+	mask = loadImage("./assets/LEDmask.png");
 }
 
 // setup canvas and framerate before drawing
 function setup() {
-	createCanvas(windowWidth, windowHeight);
-	console.log(windowWidth, windowHeight);
+	createCanvas(mask.width, mask.height);
+	console.log("Canvas Size: " + mask.width + "x" + mask.height);
 	frameRate(60);
 }
 
@@ -42,7 +47,8 @@ function setup() {
 function draw() {
 	// background
 	background(0);
-	space(width, height, 200, 2);
+	//space(width, height, 200, 2);
+	image(mask, 0, 0, width, height);
 
 	time += 0.001;
 
@@ -55,6 +61,7 @@ function draw() {
 	pop();
 }
 
+//DEBUG SPAWN METHOD
 document.addEventListener("click", () => {
 	if (creatures.length > 20) {
 		creatures.shift();
