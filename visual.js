@@ -41,28 +41,35 @@ function setup() {
 	createCanvas(mask.width, mask.height);
 	console.log("Canvas Size: " + mask.width + "x" + mask.height);
 	frameRate(60);
+	image(mask, 0, 0, width, height);
 }
 
 // run every tick; draws background, space, and creatures
 function draw() {
 	// background
-	background(0);
+	//background(0);
 	//space(width, height, 200, 2);
-	image(mask, 0, 0, width, height);
+	console.log("Creatures: " + creatures.length)
+	
+	//DEBUG STUFF
+	stroke(255,0,0);
+	strokeWeight(10);
+	line(0, 0, 0, height);
+	line(0, 0, width, 0);
+	line(width, 0, width, height);
+	line(0, height, width, height);
 
 	time += 0.001;
 
 	//draw each creature
-	push();
-	creatures.forEach((g) => {
+	for(let g of creatures) {
 		g.update();
 		g.drawCreatures();
-	});
-	pop();
+	}
 }
 
 //DEBUG SPAWN METHOD
-document.addEventListener("click", () => {
+/* document.addEventListener("click", (e) => {
 	if (creatures.length > 20) {
 		creatures.shift();
 	}
@@ -90,7 +97,39 @@ document.addEventListener("click", () => {
 	newCreature.addPoint(50, 50);
 	newCreature.normalizePoints();
 	creatures.push(newCreature);
-});
+}); */
+
+function mouseClicked() {
+	if (creatures.length > 20) {
+		creatures.shift();
+	}
+	console.log("Mouse Clicked", mouseX, mouseY);
+	let newCreature = new Creature(
+		color(
+			floor(random(0, 255)),
+			floor(random(0, 255)),
+			floor(random(0, 255)),
+			floor(random(200, 255))
+		), // hue
+		Math.floor(Math.random() * 5), // color index
+		random(0.0, 1.0), // agitatedness
+		random(0.8, 2.5), // speed
+		random(0.2, 1.2), // size
+		Math.floor(Math.random() * 5), // sprite
+		Math.floor(Math.random() * 5), // base
+		mouseX, // x
+		mouseY // y
+	)
+	newCreature.addPoint(10, 10);
+	newCreature.addPoint(40, 40);
+	newCreature.addPoint(80, 80);
+	newCreature.addPoint(120, 120);
+	newCreature.addPoint(160, 160);
+	newCreature.addPoint(200, 200);
+
+	newCreature.normalizePoints();
+	creatures.push(newCreature);
+}
 
 function colorToIndex(colorVar) {
 	switch (colorVar) {
@@ -132,20 +171,19 @@ socket.on("backend to visual", (points, who5, sprite, colorVar, base) => {
 		if (creatures.length > 20) {
 			creatures.shift();
 		}
-		creatures.push(
-			new Creature(
-				colorVar, // color (hex)
-				colorToIndex(colorVar), // color index
-				random(0.0, 0.75), // agitatedness
-				random(0.3, 1.5), // speed
-				random(0.75, 1.1), // size
-				pathToSprite(sprite), // sprite
-				pathToSprite(base), // base sprite
-				random(-width / 3, width / 3), // x
-				random(-height / 3, height / 3), // y
-				points
-			)
-		);
+		let newCreature = new Creature(
+			colorVar, // color (hex)
+			colorToIndex(colorVar), // color index
+			random(0.0, 0.75), // agitatedness
+			random(0.3, 1.5), // speed
+			random(0.75, 1.1), // size
+			pathToSprite(sprite), // sprite
+			pathToSprite(base), // base sprite
+			random(-width / 3, width / 3), // x
+			random(-height / 3, height / 3), // y
+			points // points
+		)
+		creatures.push(newCreature);
 		creatures[creatures.length - 1].points = [...points];
 		for (i = 0; i <= creatures[creatures.length - 1].points.length - 1; i++) {
 			creatures[creatures.length - 1].x[i] = creatures[creatures.length - 1].points[i]["x"];
