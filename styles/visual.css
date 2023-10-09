@@ -1,9 +1,9 @@
-:root {
+/* :root {
 	--background-blue: #161618;
 	--highlight-white: #e1e0e0;
 	--sub-gray: #afaebd;
 	--accent-blue: #212124;
-  }
+  } */
   
   * {
 	margin: 0px;
@@ -11,7 +11,7 @@
 	box-sizing: border-box;
   }
   
-  header {
+/*   header {
 	height: 12vh;
 	width: 100vw;
 	background-color: var(--accent-blue);
@@ -48,9 +48,12 @@
 	top: 15px;
 	left: 15px;
 	z-index: 50;
-}
+} */
 
 body {
 	background-color: black;
 	overflow: hidden;
+	display: grid;
+	height: 100vh;
+	place-items: center;
 }
