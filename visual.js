@@ -71,37 +71,6 @@ function draw() {
 		point(g.pos.x, g.pos.y);
 	}
 	
-	warpCreatures();
-}
-
-function warpCreatures() {
-	for(g of creatures) {
-		
-		if(brightness(mask.get(g.pos.x, g.pos.y)) < 50) {
-			stroke(255,0,0);
-			strokeWeight(10);
-			point(g.pos.x, g.pos.y);
-		}
-	}
-	/* if (this.pos.y >= height) {
-		this.pos.y = 0;
-	}
-	else if (this.pos.y <= 0) {
-		this.pos.y = height;
-	}
-
-	if (this.pos.x >= width ) {
-		this.pos.x = 0;
-	}
-	else if (this.pos.x <= 0) {
-		this.pos.x = width;
-	}
-	//check if creature is offscreen
-	if(brightness(mask.get(this.pos.x, this.pos.y)) < 50) {
-		//if it is, move it to a random location on the screen
-		this.pos.x = random(width);
-		this.pos.y = random(height);
-	} */
 }
 
 //DEBUG SPAWN METHOD
@@ -166,11 +135,12 @@ function mouseClicked() {
 
 	newCreature.normalizePoints();
 	creatures.push(newCreature);
-	creatures[creatures.length - 1].points = newCreature.points;
+	console.log(creatures[creatures.length - 1].y);
+	/* creatures[creatures.length - 1].points = newCreature.points;
 	for (i = 0; i <= creatures[creatures.length - 1].points.length - 1; i++) {
 		creatures[creatures.length - 1].x[i] = creatures[creatures.length - 1].points[i]["x"];
 		creatures[creatures.length - 1].y[i] = creatures[creatures.length - 1].points[i]["y"];
-	}
+	} */
 }
 
 function colorToIndex(colorVar) {
@@ -221,17 +191,17 @@ socket.on("backend to visual", (points, who5, sprite, colorVar, base) => {
 			random(0.75, 1.1), // size
 			pathToSprite(sprite), // sprite
 			pathToSprite(base), // base sprite
-			random(-width / 3, width / 3), // x
-			random(-height / 3, height / 3), // y
+			random(width * 0.25, width * 0.75), // x
+			random(height * 0.25, height * 0.75), // y
 			points // points
 		)
 		newCreature.normalizePoints();
 		creatures.push(newCreature);
-		creatures[creatures.length - 1].points = [...points];
-		for (i = 0; i <= creatures[creatures.length - 1].points.length - 1; i++) {
+		//creatures[creatures.length - 1].points = [...points];
+		/* for (i = 0; i <= creatures[creatures.length - 1].points.length - 1; i++) {
 			creatures[creatures.length - 1].x[i] = creatures[creatures.length - 1].points[i]["x"];
 			creatures[creatures.length - 1].y[i] = creatures[creatures.length - 1].points[i]["y"];
-		}
+		} */
 	}
 	else {
 		console.log("Missing Either Color Or Points");
