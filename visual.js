@@ -5,32 +5,33 @@ const socket = io("wss://navinate.com", { secure: true });
 let creatures = [];
 
 // arrays of sprites
-let tails = [];
-let bodies = [];
-let heads = [];
+let base_sprites = [];
+let skin_sprites = [];
+
+// arrays of sprite names
+names = [ "bread", "drops", "rombo", "star", "swirl" ];
+base_names = ["circle", "cloud", "cube", "heart", "spiky" ];
 
 // collision mask
 let mask;
 
-let time = 0;
-
 // stars
 let star_x = [],
 	star_y = [],
-	stars_made = false
-names = ["bread", "drops", "rombo", "star", "swirl"];
+	stars_made = false;
 
 // preload images
 function preload() {
-	heads.push(loadImage("./assets/sprites/heads/1/head_test.gif"));
-
 	for (let i = 0; i < names.length; i++) {
-		let images = new Array();
+		let gifs = new Array();
+		let base_gifs = new Array();
 
 		for (let j = 0; j < 5; j++) {
-			images[j] = loadImage("./assets/sprites/skin/" + names[i] + "/" + j + ".gif");
+			gifs[j] = loadImage("./assets/sprites/skin/" + names[i] + "/" + j + ".gif");
+			gifs[j] = loadImage("./assets/sprites/base/" + base_names[i] + "/" + j + ".gif");
 		}
-		bodies.push(images);
+		base_sprites.push(gifs);
+		skin_sprites.push(base_gifs);
 	}
 
 	mask = loadImage("./assets/LEDmask.png");
@@ -59,8 +60,6 @@ function draw() {
 	line(0, 0, width, 0);
 	line(width, 0, width, height);
 	line(0, height, width, height);
-
-	time += 0.001;
 	
 	//draw each creature
 	for(let g of creatures) {
@@ -161,14 +160,19 @@ function colorToIndex(colorVar) {
 function pathToSprite(path) {
 	switch (path) {
 		case "/anim/newblob.gif":
+		case "/anim/base/circle.gif":
 			return (0);
 		case "/anim/drops.gif":
+		case "/anim/base/cloud.gif":
 			return (1);
 		case "/anim/sprite03.gif":
+		case "/anim/base/cube.gif":
 			return (2);
 		case "/anim/star01.gif":
+		case "/anim/base/heart.gif":
 			return (3);
 		case "/anim/head.gif":
+		case "/anim/base/spikey.gif":
 			return (4);
 		default:
 			return (0);
