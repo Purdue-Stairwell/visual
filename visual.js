@@ -126,12 +126,10 @@ function mouseClicked() {
 		mouseY, // y
 		[], // points
 	)
-	newCreature.addPoint(10, 10);
-	newCreature.addPoint(40, 40);
+	newCreature.addPoint(0, 0);
+	newCreature.addPoint(0, 80);
 	newCreature.addPoint(80, 80);
-	newCreature.addPoint(120, 120);
-	newCreature.addPoint(160, 160);
-	newCreature.addPoint(200, 200);
+	newCreature.addPoint(160, 80);
 
 	newCreature.normalizePoints();
 	creatures.push(newCreature);
